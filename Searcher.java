@@ -19,6 +19,7 @@ public class Searcher<ActionT, SearchStateT extends SearchState<ActionT, SearchS
 
     public SearchPath<SearchStateT,ActionT> expandOne() {
         expansions++;
+        if(expansions % 1000 == 0) System.out.println(expansions);
         var path = frontier.poll();
         if(path != null) {
             for(ActionT action : path.STATE.actions()) {

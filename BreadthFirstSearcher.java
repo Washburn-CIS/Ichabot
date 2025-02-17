@@ -8,6 +8,8 @@ public class BreadthFirstSearcher<ActionT, SearchStateT extends SearchState<Acti
         extends Searcher<ActionT,SearchStateT>  {
     public BreadthFirstSearcher(SearchStateT initialState, 
                     Predicate<SearchStateT> goalTest) {
-            super(initialState,goalTest,new LinkedList<SearchPath<SearchStateT,ActionT>>());
+            super(initialState,
+                  goalTest,
+                  new LinkedList<SearchPath<SearchStateT,ActionT>>());  // FIFO queue
     }
 }
