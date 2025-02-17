@@ -33,7 +33,7 @@ public class NPuzzleState implements SearchState<NPuzzleAction,NPuzzleState> {
         var viewed = new HashSet<Integer>();
         for(int r=0; r<SIZE; r++) {
             for(int c=0; c<SIZE; c++) {
-                if(stateValues[r][c] >= SIZE*SIZE) {
+                if(stateValues[r][c] >= SIZE*SIZE || stateValues[r][c] < 0) {
                     throw new IllegalArgumentException(stateValues[r][c] + " not a valid puzzle value");
                 }
                 if(stateValues[r][c] == 0) {
@@ -48,17 +48,6 @@ public class NPuzzleState implements SearchState<NPuzzleAction,NPuzzleState> {
         }
         BLANK_COL = bc;
         BLANK_ROW = br;
-    }
-
-    @Override
-    public boolean isGoal() {
-        for(int r=0; r<SIZE; r++) {
-            for(int c=0; c<SIZE; c++) {
-                if(puzzleState[r][c] != r*SIZE + c + 1)
-                    return false;
-            }
-        }
-        return true;
     }
 
     @Override
