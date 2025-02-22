@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="edu.washburn.cis.ichabot.search.SearchTest" time="0.068" tests="1" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="21"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/home/jbkm/OneDrive/CM331/Ichabot/target/test-classes:/home/jbkm/OneDrive/CM331/Ichabot/target/classes:/home/jbkm/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:"/>
+    <property name="java.vm.vendor" value="Red Hat, Inc."/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://www.redhat.com/"/>
+    <property name="os.name" value="Linux"/>
+    <property name="java.vm.specification.version" value="21"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-21-openjdk-21.0.6.0.7-1.fc40.x86_64/lib"/>
+    <property name="sun.java.command" value="/home/jbkm/OneDrive/CM331/Ichabot/target/surefire/surefirebooter-20250222155236969_3.jar /home/jbkm/OneDrive/CM331/Ichabot/target/surefire 2025-02-22T15-52-36_927-jvmRun1 surefire-20250222155236969_1tmp surefire_0-20250222155236969_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/home/jbkm/OneDrive/CM331/Ichabot/target/test-classes:/home/jbkm/OneDrive/CM331/Ichabot/target/classes:/home/jbkm/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/jbkm"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2025-01-21"/>
+    <property name="java.home" value="/usr/lib/jvm/java-21-openjdk-21.0.6.0.7-1.fc40.x86_64"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/home/jbkm/OneDrive/CM331/Ichabot"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="surefire.real.class.path" value="/home/jbkm/OneDrive/CM331/Ichabot/target/surefire/surefirebooter-20250222155236969_3.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="21.0.6+7"/>
+    <property name="user.name" value="jbkm"/>
+    <property name="stdout.encoding" value="UTF-8"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="6.12.11-100.fc40.x86_64"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="(Red_Hat-21.0.6.0.7-1)"/>
+    <property name="localRepository" value="/home/jbkm/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://bugzilla.redhat.com/enter_bug.cgi?product=Fedora&amp;component=java-21-openjdk&amp;version=40"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="21.0.6"/>
+    <property name="user.dir" value="/home/jbkm/OneDrive/CM331/Ichabot"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="UTF-8"/>
+    <property name="java.vendor" value="Red Hat, Inc."/>
+    <property name="java.vm.version" value="21.0.6+7"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="65.0"/>
+  </properties>
+  <testcase name="testNPuzzle" classname="edu.washburn.cis.ichabot.search.SearchTest" time="0.057">
+    <system-out><![CDATA[Time: 34
+678
+1 2 3 
+4 5 6 
+7 8 0 
+
+LEFT
+1 2 3 
+4 5 6 
+7 0 8 
+
+LEFT
+1 2 3 
+4 5 6 
+0 7 8 
+
+UP
+1 2 3 
+0 5 6 
+4 7 8 
+
+RIGHT
+1 2 3 
+5 0 6 
+4 7 8 
+
+RIGHT
+1 2 3 
+5 6 0 
+4 7 8 
+
+DOWN
+1 2 3 
+5 6 8 
+4 7 0 
+
+LEFT
+1 2 3 
+5 6 8 
+4 0 7 
+
+UP
+1 2 3 
+5 0 8 
+4 6 7 
+
+LEFT
+1 2 3 
+0 5 8 
+4 6 7 
+
+DOWN
+1 2 3 
+4 5 8 
+0 6 7 
+
+RIGHT
+1 2 3 
+4 5 8 
+6 0 7 
+
+RIGHT
+1 2 3 
+4 5 8 
+6 7 0 
+
+UP
+1 2 3 
+4 5 0 
+6 7 8 
+
+]]></system-out>
+  </testcase>
+</testsuite>
