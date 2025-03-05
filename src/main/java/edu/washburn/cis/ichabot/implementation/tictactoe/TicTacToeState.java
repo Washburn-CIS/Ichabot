@@ -20,6 +20,13 @@ public class TicTacToeState implements SearchState<TicTacToeAction,TicTacToeStat
     }
 
     public TicTacToeState nextState(TicTacToeAction action) {
-        return null; //stub
+        char[][] newBoard = new char[BOARD.length][BOARD.length];
+        for(int r=0; r<BOARD.length; r++) 
+          for(int c=0; c<BOARD.length; c++) 
+            newBoard[r][c] = BOARD[r][c];
+
+        newBoard[action.ROW][action.COL] = action.PLAYER;
+
+        return new TicTacToeState(newBoard, !MAX_TURN);
     }
 }
