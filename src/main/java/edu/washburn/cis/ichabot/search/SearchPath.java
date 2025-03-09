@@ -20,4 +20,12 @@
             this.STATE = startNode;
             this.COST = 0;
         }
+
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            
+            for(var s = this;s.PRIOR != null;s=s.PRIOR) 
+                sb.append(s.ACTION+",");
+            return sb.toString();
+        }
     }

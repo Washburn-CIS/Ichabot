@@ -1,20 +1,89 @@
 package edu.washburn.cis.ichabot.search;
 
-import java.util.function.Predicate;
-import java.util.Queue;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.function.Function;
-import java.util.Stack;
-import java.util.EmptyStackException;
+import java.util.function.*;
+import java.util.*;
 
 public class Searcher<ActionT, SearchStateT extends SearchState<ActionT, SearchStateT>> {
-    private Predicate<SearchStateT> goalTest;
-    private Queue<SearchPath<SearchStateT,ActionT>> frontier;
-    private int expansions = 0;
-    private Set<SearchPath<SearchStateT,ActionT>> goals = new HashSet<SearchPath<SearchStateT,ActionT>>();
+
+    public static boolean verbose = false;
+
+    public static <I,O extends Comparable> I argmax(Collection<? extends I> inputs,
+            Function<? super I, O> f) {
+                O maxOutput = null;
+                I maxInput = null;
+                for(I input : inputs) {
+                    O output = f.apply(input);
+                    if(verbose) System.out.println(input + "->" + output);
+                    if(maxOutput == null || maxOutput.compareTo(output) < 0) {
+                        maxInput = input;
+                        maxOutput = output;
+                    }
+                }
+                return maxInput;
+    }
+
+    public static <ActionT, SearchStateT extends MinimaxSearchState<ActionT, SearchStateT>>
+            ActionT minimaxSearch(SearchStateT state) {
+                return argmax(state.actions(), 
+                   action -> minimaxSearchMin(state.nextState(action)));
+    }
+
+    public static <ActionT, SearchStateT extends MinimaxSearchState<ActionT, SearchStateT>>
+            double minimaxSearchMin(SearchStateT state) {
+                return state.actions().stream()
+                    .map(a -> state.nextState(a))
+                    .mapToDouble(s -> s.isLeaf() ? s.evaluate() : minimaxSearchMax(s))
+                    .min().getAsDouble();
+    }
+
+    public static <ActionT, SearchStateT extends MinimaxSearchState<ActionT, SearchStateT>>
+            double minimaxSearchMax(SearchStateT state) {
+                return state.actions().stream()
+                    .map(a -> state.nextState(a))
+                    .mapToDouble(s -> s.isLeaf() ? s.evaluate() : minimaxSearchMin(s))
+                    .max().getAsDouble();
+    }
+
+    public static <ActionT, SearchStateT extends MinimaxSearchState<ActionT, SearchStateT>>
+            ActionT alphaBetaSearch(SearchStateT state) {
+                double α = Double.NEGATIVE_INFINITY;
+                double β = Double.POSITIVE_INFINITY;
+                ActionT maxAction = null;
+                for(var action : state.actions()) {
+                    var s = state.nextState(action);
+                    double utility = alphaBetaSearchMin(α,β,s);
+                    if(verbose) System.out.println(action + " -> " + utility);
+                    if(utility > α) {
+                        α = utility;
+                        maxAction = action;
+                    }
+                }
+                return maxAction;
+    }
+
+    public static <ActionT, SearchStateT extends MinimaxSearchState<ActionT, SearchStateT>>
+            double alphaBetaSearchMin(double α, double β, SearchStateT state) {
+                if(state.isLeaf()) return state.evaluate();
+                for(ActionT action : state.actions()) {
+                    var s = state.nextState(action);
+                    double utility = alphaBetaSearchMax(α,β,s);
+                    if(utility <= α) return utility;
+                    if(utility < β) β = utility;
+                }
+                return β;
+    }
+
+    public static <ActionT, SearchStateT extends MinimaxSearchState<ActionT, SearchStateT>>
+            double alphaBetaSearchMax(double α, double β, SearchStateT state) {
+                if(state.isLeaf()) return state.evaluate();
+                for(ActionT action : state.actions()) {
+                    var s = state.nextState(action);
+                    double utility = alphaBetaSearchMin(α,β,s);
+                    if(utility >= β) return utility;
+                    if(utility > α) α = utility;
+                }
+                return α;
+    }
 
     public static <SearchStateT,ActionT> Queue<SearchPath<SearchStateT,ActionT>> generateDFSQueue() {
         return new SearchStack<SearchPath<SearchStateT,ActionT>>();
@@ -32,6 +101,11 @@ public class Searcher<ActionT, SearchStateT extends SearchState<ActionT, SearchS
                                   path2.COST + heuristic.apply(path2.STATE)));
     }
 
+    private Predicate<SearchStateT> goalTest;
+    private Queue<SearchPath<SearchStateT,ActionT>> frontier;
+    private int expansions = 0;
+    private Set<SearchPath<SearchStateT,ActionT>> goals = new HashSet<SearchPath<SearchStateT,ActionT>>();
+
     public Searcher(SearchStateT initialState, 
                     Predicate<SearchStateT> goalTest,
                     Queue<SearchPath<SearchStateT,ActionT>> frontier) {
@@ -43,11 +117,20 @@ public class Searcher<ActionT, SearchStateT extends SearchState<ActionT, SearchS
     public SearchPath<SearchStateT,ActionT> expandOne() {
         expansions++;
         var path = frontier.poll();
+        if(verbose) System.out.println("EXPANDING: '" + path+"'");
         if(path != null) {
-            for(ActionT action : path.STATE.actions()) {
+            if(verbose) System.out.println("ACTIONS:");
+            var actions = path.STATE.actions();
+            if(actions.size() == 0) {
+                if(verbose) System.out.println("LEAF NODE REACHED");
+            } else for(ActionT action : actions) {
+                if(verbose) System.out.println(action);
                 var newState = path.STATE.nextState(action);
                 var newPath = new SearchPath(path, action, newState);
-                if(goalTest.test(newState)) goals.add(newPath);
+                if(goalTest.test(newState)) {
+                    if(verbose) System.out.println("GOAL DISCOVERED");
+                    goals.add(newPath);
+                }
                 frontier.add(newPath);
             }
         }
@@ -55,9 +138,19 @@ public class Searcher<ActionT, SearchStateT extends SearchState<ActionT, SearchS
     }
 
     public SearchPath<SearchStateT,ActionT> findFirst() {
+        if(verbose) System.out.println("STARTING SEARCH ");
+        
         while(goals.size() == 0 && frontier.size() > 0) expandOne();
         for(SearchPath<SearchStateT,ActionT> path : goals) return path;
         return null;
+    }
+
+
+    public Set<SearchPath<SearchStateT,ActionT>> findAll() {
+        if(verbose) System.out.println("STARTING SEARCH ");
+        
+        while(frontier.size() > 0) expandOne();
+        return goals;
     }
 
     public int getExpansions() { return expansions; }

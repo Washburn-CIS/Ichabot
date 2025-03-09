@@ -8,6 +8,10 @@ public interface SearchState<ActionT, SearchStateT extends SearchState<ActionT, 
 
     public SearchStateT nextState(ActionT action);
 
+    public default boolean isLeaf() {
+        return actions().size() == 0;
+    }
+
     public default Set<SearchStateT> children() {
         var states = new HashSet<SearchStateT>();
         for(ActionT action : actions()) {
