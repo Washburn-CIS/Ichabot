@@ -46,12 +46,21 @@ public class Searcher<ActionT, SearchStateT extends SearchState<ActionT, SearchS
 
     public static <ActionT, SearchStateT extends MinimaxSearchState<ActionT, SearchStateT>>
             ActionT alphaBetaSearch(SearchStateT state) {
+        return alphaBetaSearch(state, 
+                s -> s.evaluate(), 
+                Double.POSITIVE_INFINITY);
+    }
+
+    public static <ActionT, SearchStateT extends MinimaxSearchState<ActionT, SearchStateT>>
+            ActionT alphaBetaSearch(SearchStateT state, 
+                    Function<? super SearchStateT,Double> h,
+                    double depthLimit) {
                 double α = Double.NEGATIVE_INFINITY;
                 double β = Double.POSITIVE_INFINITY;
                 ActionT maxAction = null;
                 for(var action : state.actions()) {
                     var s = state.nextState(action);
-                    double utility = alphaBetaSearchMin(α,β,s);
+                    double utility = alphaBetaSearchMin(α,β,s,h,1,depthLimit);
                     if(verbose) System.out.println(action + " -> " + utility);
                     if(utility > α) {
                         α = utility;
@@ -62,11 +71,14 @@ public class Searcher<ActionT, SearchStateT extends SearchState<ActionT, SearchS
     }
 
     public static <ActionT, SearchStateT extends MinimaxSearchState<ActionT, SearchStateT>>
-            double alphaBetaSearchMin(double α, double β, SearchStateT state) {
+            double alphaBetaSearchMin(double α, double β, SearchStateT state,
+                    Function<? super SearchStateT,Double> h,
+                                      int depth, double depthLimit) {
                 if(state.isLeaf()) return state.evaluate();
+                if(depth >= depthLimit) return h.apply(state);
                 for(ActionT action : state.actions()) {
                     var s = state.nextState(action);
-                    double utility = alphaBetaSearchMax(α,β,s);
+                    double utility = alphaBetaSearchMax(α,β,s,h,depth+1,depthLimit);
                     if(utility <= α) return utility;
                     if(utility < β) β = utility;
                 }
@@ -74,11 +86,14 @@ public class Searcher<ActionT, SearchStateT extends SearchState<ActionT, SearchS
     }
 
     public static <ActionT, SearchStateT extends MinimaxSearchState<ActionT, SearchStateT>>
-            double alphaBetaSearchMax(double α, double β, SearchStateT state) {
+            double alphaBetaSearchMax(double α, double β, SearchStateT state,
+                    Function<? super SearchStateT,Double> h,
+                                      int depth, double depthLimit) {
                 if(state.isLeaf()) return state.evaluate();
+                if(depth >= depthLimit) return h.apply(state);
                 for(ActionT action : state.actions()) {
                     var s = state.nextState(action);
-                    double utility = alphaBetaSearchMin(α,β,s);
+                    double utility = alphaBetaSearchMin(α,β,s,h,depth+1,depthLimit);
                     if(utility >= β) return utility;
                     if(utility > α) α = utility;
                 }
