@@ -24,13 +24,14 @@ public class Simulator<CommandT extends Serializable,
 
     public boolean step() {
         System.out.println("Round: " + round);
+        round++;
         var percept = ENV.accept(commandTrace.size() > 0 ? commandTrace.get(commandTrace.size()-1) : null);
         if(percept == null) {
             System.out.println("Simulation Ended");
             return false;
         }
         perceptTrace.add(percept);
-        System.out.println("Percept: ");
+        System.out.println("Percept: " + percept);
         var command = AGENT.percieve(percept);
         System.out.println("Command Issued: " + command);
         commandTrace.add(command);

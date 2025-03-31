@@ -1,13 +1,17 @@
+package edu.washburn.cis.ichabot.implementation.sinkingfortune;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
+import java.io.Serializable;
 
-public record SFPercept(SFMap visibleMap,
-    SFCoordinates yourLocation,
-    Map<SFCoordinates,Integer> agentLocations,
+public record SFPercept(
+    SFMap visibleMap, 
     int waterLevel,
+    int yourID,
+    Map<SFCoordinates,Integer> agentLocations,
     Map<Integer,Integer> agentGold,
     List<Integer> turnOrder,
-    Set<SFCoordinates> treasureMaps) {
+    Set<SFCoordinates> treasureMaps) implements Serializable {
     
 }
