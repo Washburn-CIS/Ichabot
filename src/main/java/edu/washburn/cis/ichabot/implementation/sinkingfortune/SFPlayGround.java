@@ -25,7 +25,7 @@ public class SFPlayGround {
         );
 
         SFAgent agent = new SFAgent() {
-            public SFCommand percieve(Serializable p) { // TODO: fix type bounds
+            public SFCommand percieve(SFPercept p) { // TODO: fix type bounds
                 return SFCommand.values()[(int)(Math.random()*4)];
             }
         };

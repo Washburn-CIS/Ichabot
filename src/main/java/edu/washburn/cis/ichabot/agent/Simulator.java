@@ -1,24 +1,23 @@
 package edu.washburn.cis.ichabot.agent;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class Simulator<CommandT extends Serializable, 
                        PerceptT extends Serializable,
-                       EnvironmentT extends Environment<CommandT,PerceptT>,
-                       AgentT extends Agent<CommandT, PerceptT, EnvironmentT>> {
+                       AgentT extends Agent<CommandT, PerceptT>,
+                       EnvironmentT extends Environment<CommandT,PerceptT,AgentT>> {
 
-    public final AgentT AGENT;
+    public final List<AgentT> AGENTS;
     public final EnvironmentT ENV;
 
-    private List<PerceptT> perceptTrace = new ArrayList<PerceptT>();
-    private List<CommandT> commandTrace = new ArrayList<CommandT>();
+    private List<Map<AgentT,PerceptT>> perceptTrace = new ArrayList<Map<AgentT,PerceptT>>();
+    private List<Map<AgentT,CommandT>> commandTrace = new ArrayList<Map<AgentT,CommandT>>();
     private int round = 1;
     
-    public Simulator(EnvironmentT env, AgentT agent) {
-        this.AGENT = agent;
+    public Simulator(EnvironmentT env, AgentT ... agents) {
+        this.AGENTS = new ArrayList<AgentT>();
+        for(var agent : agents) this.AGENTS.add(agent);
         this.ENV = env;
     }
 
@@ -32,9 +31,14 @@ public class Simulator<CommandT extends Serializable,
         }
         perceptTrace.add(percept);
         System.out.println("Percept: " + percept);
-        var command = AGENT.percieve(percept);
-        System.out.println("Command Issued: " + command);
-        commandTrace.add(command);
+
+        var commands = new HashMap<AgentT,CommandT>();
+        for(var agent: AGENTS) 
+            commands.put(agent, agent.percieve(percept.get(agent)));
+        System.out.println("Commands Issued: " + commands);
+        commandTrace.add(commands);
+
+        
         return true;
     }
 

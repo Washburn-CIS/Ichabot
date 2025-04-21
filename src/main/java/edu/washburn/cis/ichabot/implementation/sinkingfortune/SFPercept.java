@@ -9,7 +9,7 @@ public record SFPercept(
     SFMap visibleMap, 
     int waterLevel,
     int yourID,
-    Map<SFCoordinates,Integer> agentLocations,
+    Map<Integer,SFCoordinates> agentLocations,
     Map<Integer,Integer> agentGold,
     List<Integer> turnOrder,
     Set<SFCoordinates> treasureMaps) implements Serializable {
