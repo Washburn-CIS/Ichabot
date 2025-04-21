@@ -1,9 +1,9 @@
 package edu.washburn.cis.ichabot.implementation.sinkingfortune;
 
-import java.util.Set;
-import java.util.Map;
-import java.util.Collections;
+import java.util.*;
 import java.io.Serializable;
+
+import static edu.washburn.cis.ichabot.implementation.sinkingfortune.SFCoordinates.coordinates;
 
 public record SFMap(
     int width, 
@@ -23,4 +23,29 @@ public record SFMap(
             exits,
             Collections.emptyMap());
     }
+
+    public static Map<SFCoordinates,Integer> createIntMap(int[][] map) {
+        var m = new HashMap<SFCoordinates,Integer>();
+        for(int r=0; r<map.length; r++) {
+            for(int c=0; c<map[r].length; c++) {
+                m.put(coordinates(r,c), map[r][c]);
+            }
+        }
+        return m;
+    }
+
+    public static final int[][] ONE_PLAYER_CHALLENGE1_HEIGHT = {
+        {5, 5},
+        {5, 5}
+    };
+    public static final int[][] ONE_PLAYER_CHALLENGE1_GOLD = {
+        {00, 00},
+        {00, 10}
+    };
+    public static final SFMap ONE_PLAYER_CHALLENGE1 = new SFMap(2, 2, 
+        createIntMap(ONE_PLAYER_CHALLENGE1_HEIGHT),       
+        createIntMap(ONE_PLAYER_CHALLENGE1_GOLD), 
+        Set.of(coordinates(0, 0)),                     //spawns
+        Set.of(coordinates(1,1)),                     // exits
+        Map.of(coordinates(0,1), Set.of(coordinates(1,0))));  // maps
 }

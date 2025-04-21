@@ -8,21 +8,6 @@ import java.io.Serializable;
 
 public class SFPlayGround {
     public static void main(String[] args) {
-        SFMap map = new SFMap(2, 2, 
-            Map.of(new SFCoordinates(0, 0), 10,
-                new SFCoordinates(0, 1), 10,
-                new SFCoordinates(1, 0), 10,
-                new SFCoordinates(1, 1), 10
-            ),
-            Map.of(new SFCoordinates(0, 0), 0,
-                new SFCoordinates(0, 1), 0,
-                new SFCoordinates(1, 0), 10,
-                new SFCoordinates(1, 1), 0
-            ),
-            Set.of(new SFCoordinates(0, 0)),
-            Set.of(new SFCoordinates(1, 1)),
-            Map.of(new SFCoordinates(0, 1), Set.of(new SFCoordinates(1, 0)))
-        );
 
         SFAgent agent = new SFAgent() {
             public SFCommand percieve(SFPercept p) { // TODO: fix type bounds
@@ -31,7 +16,7 @@ public class SFPlayGround {
         };
 
         System.out.println(map);
-        SFSinglePlayerEnvironment env = new SFSinglePlayerEnvironment(map, agent);
+        SFSinglePlayerEnvironment env = new SFSinglePlayerEnvironment(SFMap.ONE_PLAYER_CHALLENGE1, agent);
         Simulator sim = new Simulator(env, agent);
         sim.simulate();
     }

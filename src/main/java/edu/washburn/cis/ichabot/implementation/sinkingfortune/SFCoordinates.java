@@ -14,4 +14,6 @@ public record SFCoordinates(int row, int col) implements Serializable {
             case PASS: yield this;
         };
     }
+
+    public static SFCoordinates coordinates(int row, int col) { return new SFCoordinates(row, col); }
 }
