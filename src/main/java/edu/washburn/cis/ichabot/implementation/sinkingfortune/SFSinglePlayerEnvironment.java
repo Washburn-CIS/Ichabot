@@ -26,7 +26,7 @@ public class SFSinglePlayerEnvironment
     }
     
     public Map<SFAgent,SFPercept> accept(Map<SFAgent,SFCommand> commands) {
-        var cmd = commands.get(AGENT);
+        var cmd = commands != null ? commands.get(AGENT) : null;
         if(cmd != null) {
             agentLocation = agentLocation.move(cmd);
             if(agentLocation.row() < 0 ||
