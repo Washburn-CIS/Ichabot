@@ -107,4 +107,12 @@ public class NPuzzleState implements SearchState<NPuzzleAction,NPuzzleState> {
         }
         return ret;
     }
+    @Override
+    public boolean equals(Object state) {
+        return Arrays.deepEquals(puzzleState,((NPuzzleState)state).puzzleState);
+    }
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(puzzleState);
+    }
 }
