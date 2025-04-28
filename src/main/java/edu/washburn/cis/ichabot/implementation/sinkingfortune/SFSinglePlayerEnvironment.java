@@ -24,6 +24,10 @@ public class SFSinglePlayerEnvironment
         List<SFCoordinates> bids = agent.bidOnSpawn(map);
         agentLocation = bids.get(0);
     }
+
+    public SFMap getMap() { return map; }
+    public Map<SFCoordinates, Integer> getGold() { return gold; }
+    public int getWaterLevel() { return waterLevel; }
     
     public Map<SFAgent,SFPercept> accept(Map<SFAgent,SFCommand> commands) {
         var cmd = commands != null ? commands.get(AGENT) : null;
