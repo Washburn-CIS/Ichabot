@@ -45,7 +45,57 @@ public record SFMap(
     public static final SFMap ONE_PLAYER_CHALLENGE1 = new SFMap(2, 2, 
         createIntMap(ONE_PLAYER_CHALLENGE1_HEIGHT),       
         createIntMap(ONE_PLAYER_CHALLENGE1_GOLD), 
-        Set.of(coordinates(0, 0), coordinates(0, 1)),                     //spawns
+        Set.of(coordinates(0, 0), coordinates(0, 1)),  //spawns
         Set.of(coordinates(1,1)),                     // exits
         Map.of(coordinates(0,1), Set.of(coordinates(1,0))));  // maps
+
+    
+
+    public static final int[][] CHALLENGE2_HEIGHT = {
+        {20, 20, 20, 20, 20, 20, 20, 20},
+        {20, 20, 20, 20, 20, 20, 20, 20},
+        {20, 20, 20, 20, 20, 20, 20, 20},
+        {20, 20, 20, 20, 20, 20, 20, 20},
+        {20, 20, 20, 20, 20, 20, 20, 20},
+        {20, 20, 20, 20, 20, 20, 20, 20},
+        {20, 20, 20, 20, 20, 20, 20, 20},
+        {20, 20, 20, 20, 20, 20, 20, 20}
+    };
+    public static final int[][] CHALLENGE2_GOLD = {
+        {00, 00, 00, 10, 00, 00, 00, 00},
+        {00, 00, 00, 00, 00, 10, 00, 00},
+        {00, 00, 00, 00, 10, 00, 10, 00},
+        {00, 00, 00, 00, 00, 00, 00, 00},
+        {00, 00, 10, 00, 00, 00, 10, 00},
+        {00, 00, 10, 00, 00, 00, 00, 00},
+        {00, 00, 10, 00, 00, 00, 00, 00},
+        {50, 00, 10, 00, 00, 00, 00, 00}
+    };
+    public static final SFMap CHALLENGE2 = new SFMap(8, 8, 
+        createIntMap(CHALLENGE2_HEIGHT),       
+        createIntMap(CHALLENGE2_GOLD), 
+        Set.of(coordinates(1, 0), coordinates(0, 1)),  //spawns
+        Set.of(coordinates(7,7)),                     // exits
+        Map.of(coordinates(0,1), 
+            Set.of(coordinates(7,0),
+            coordinates(4,2),
+            coordinates(5,2),
+            coordinates(6,2),
+            coordinates(7,2),
+            coordinates(0,3),
+            coordinates(2,4),
+            coordinates(1,5),
+            coordinates(2,6),
+            coordinates(1,0)),
+        coordinates(1,0), 
+        Set.of(coordinates(7,0),
+            coordinates(4,2),
+            coordinates(5,2),
+            coordinates(6,2),
+            coordinates(7,2),
+            coordinates(0,3),
+            coordinates(2,4),
+            coordinates(1,5),
+            coordinates(2,6),
+            coordinates(1,0))));  // maps
 }

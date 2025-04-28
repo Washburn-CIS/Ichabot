@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class SFPlayGround {
     public static void main(String[] args) {
-        final var map = SFMap.ONE_PLAYER_CHALLENGE1;
+        final var map = SFMap.CHALLENGE2;
         SFAgent agent1 = new SFAgent() {
             public SFCommand percieve(SFPercept p) { 
                 var loc = p.agentLocations().get(p.yourID());
