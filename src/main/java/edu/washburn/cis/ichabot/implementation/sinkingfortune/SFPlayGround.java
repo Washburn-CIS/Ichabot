@@ -12,9 +12,10 @@ import java.util.Scanner;
 public class SFPlayGround {
     public static void main(String[] args) {
         final var map = SFMap.CHALLENGE2;
-
+        var agent1 = new SFModelAgent(map);
+        var agent2 = new SFModelAgent(map);
         SFEnvironment env = new SFEnvironment(map, 
-            List.of(new SFModelAgent(map), new SFModelAgent(map)));
+            List.of(agent1, agent2));
         Simulator sim = new Simulator(env, agent1, agent2);
         Scanner input = new Scanner(System.in);
         /*
