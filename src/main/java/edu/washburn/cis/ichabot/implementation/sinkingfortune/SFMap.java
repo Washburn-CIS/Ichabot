@@ -49,7 +49,6 @@ public record SFMap(
         Set.of(coordinates(1,1)),                     // exits
         Map.of(coordinates(0,1), Set.of(coordinates(1,0))));  // maps
 
-    
 
     public static final int[][] CHALLENGE2_HEIGHT = {
         {20, 20, 20, 20, 20, 20, 20, 20},
