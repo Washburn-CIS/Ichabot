@@ -4,20 +4,25 @@ import edu.washburn.cis.ichabot.agent.Environment;
 
 import java.util.*;
 
-public class SFMultiPlayerEnvironment 
+public class SFEnvironment 
         extends Environment<SFCommand,SFPercept,SFAgent> {
 
     private final SFMap map;
-    private Map<SFAgent,SFCoordinates> agentLocations;
-    private Map<SFAgent,Integer> agentGold = new HashMap<SFAgent,Integer>();
+    private Map<SFAgent,SFCoordinates> agentLocations = 
+        new HashMap<SFAgent,SFCoordinates>();
+    private Map<SFAgent,Integer> agentGold = 
+        new HashMap<SFAgent,Integer>();
     private int waterLevel = 0;
     private Map<SFCoordinates, Integer> gold;
     private List<SFAgent> turnOrder;
-    private Map<SFAgent,Integer> agentIds = new HashMap<SFAgent,Integer>();
-    private HashSet<SFAgent> finishedAgents = new HashSet<SFAgent>();
-    private HashSet<SFAgent> deadAgents = new HashSet<SFAgent>();
+    private Map<SFAgent,Integer> agentIds = 
+        new HashMap<SFAgent,Integer>();
+    private HashSet<SFAgent> finishedAgents = 
+        new HashSet<SFAgent>();
+    private HashSet<SFAgent> deadAgents = 
+        new HashSet<SFAgent>();
 
-    public SFMultiPlayerEnvironment(SFMap map, List<SFAgent> agentList) {
+    public SFEnvironment(SFMap map, List<SFAgent> agentList) {
         this.turnOrder = agentList;
         this.map = map;
         var agents = new HashSet<SFAgent>(agentList);
@@ -45,6 +50,20 @@ public class SFMultiPlayerEnvironment
             }
         }
     }
+
+    public Map<SFAgent,SFCoordinates> getAgentLocations() { 
+        return agentLocations; 
+    }
+    public Set<SFAgent> getDeadAgents() {
+        return deadAgents;
+    }
+    public Set<SFAgent> getFinishedAgents() { 
+        return finishedAgents;
+    }
+    public SFMap getMap() { return map; }
+    public Map<SFCoordinates, Integer> getGold() { return gold; }
+    public int getWaterLevel() { return waterLevel; }
+    public Map<SFAgent, Integer> getAgentIds() { return agentIds; }
     
     public Map<SFAgent,SFPercept> accept(Map<SFAgent,SFCommand> commands) {
         var percepts = new HashMap<SFAgent,SFPercept>();
@@ -53,31 +72,29 @@ public class SFMultiPlayerEnvironment
         for(int i=1; i<=turnOrder.size(); i++)
             newTurnOrder.add(agentIds.get(turnOrder.get(i%turnOrder.size())));
 
-        var newAgentGold = new HashMap<Integer,Integer>();
-        for(SFAgent agent : turnOrder) 
-            newAgentGold.put(agentIds.get(agent), agentGold.get(agent));
-        
-        var newAgentLocations = new HashMap<Integer,SFCoordinates>();
-        for(SFAgent agent : turnOrder) 
-            newAgentLocations.put(agentIds.get(agent), agentLocations.get(agent));
-
         for(SFAgent agent : turnOrder) {
             if(finishedAgents.contains(agent)) continue;
             if(deadAgents.contains(agent)) continue;
             var cmd = commands.get(agent);
             var agentLocation = agentLocations.get(agent);
             if(cmd != null) {
-                agentLocations.put(agent, agentLocation.move(cmd));
-                if(agentLocation.row() < 0 ||
-                    agentLocation.col() < 0 ||
-                    agentLocation.row() >= map.height() ||
-                    agentLocation.col() >= map.width())
-                        throw new IllegalArgumentException("illegal move");
+                var dest = agentLocations.get(agent).move(cmd);
+                if(!agentLocations.values().contains(dest)) {
+                    agentLocations.remove(agent);
+                    agentLocation = agentLocation.move(cmd);
+                    if(agentLocation.row() < 0 ||
+                        agentLocation.col() < 0 ||
+                        agentLocation.row() >= map.height() ||
+                        agentLocation.col() >= map.width())
+                            throw new IllegalArgumentException("illegal move");
+                    
+                    agentLocations.put(agent, agentLocation);
+                }
             }    
             
-            agentGold.put(agent, gold.get(agentLocation));
+            agentGold.put(agent, 
+                agentGold.get(agent) + gold.get(agentLocation));
             gold.put(agentLocation, 0);
-            waterLevel++;
 
             if(map.exits().contains(agentLocation)) {
                 agentLocations.remove(agent);
@@ -88,7 +105,19 @@ public class SFMultiPlayerEnvironment
                 agentLocations.remove(agent);
                 deadAgents.add(agent);
             }
+        }
 
+        var newAgentLocations = new HashMap<Integer,SFCoordinates>();
+        var newAgentGold = new HashMap<Integer,Integer>();
+        for(SFAgent agent : turnOrder) {
+            var id = agentIds.get(agent);
+            newAgentGold.put(id, agentGold.get(agent));
+            newAgentLocations.put(id, agentLocations.get(agent));
+        }
+
+        for(SFAgent agent : turnOrder) {
+            var agentLocation = agentLocations.get(agent);
+            if(agentLocation == null) continue;
             SFPercept p = new SFPercept(
                 map.agentVisible(),
                 waterLevel,
@@ -99,9 +128,9 @@ public class SFMultiPlayerEnvironment
                 map.treasureMaps().get(agentLocation)
             );
 
-
             percepts.put(agent, p);
         }
+        waterLevel++;
         return percepts;
     }
 }

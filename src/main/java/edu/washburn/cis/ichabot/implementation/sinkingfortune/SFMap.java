@@ -40,12 +40,12 @@ public record SFMap(
     };
     public static final int[][] ONE_PLAYER_CHALLENGE1_GOLD = {
         {00, 00},
-        {00, 10}
+        {10, 00}
     };
     public static final SFMap ONE_PLAYER_CHALLENGE1 = new SFMap(2, 2, 
         createIntMap(ONE_PLAYER_CHALLENGE1_HEIGHT),       
         createIntMap(ONE_PLAYER_CHALLENGE1_GOLD), 
-        Set.of(coordinates(0, 0)),                     //spawns
+        Set.of(coordinates(0, 0), coordinates(0, 1)),                     //spawns
         Set.of(coordinates(1,1)),                     // exits
         Map.of(coordinates(0,1), Set.of(coordinates(1,0))));  // maps
 }

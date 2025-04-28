@@ -24,8 +24,10 @@ public class Simulator<CommandT extends Serializable,
     public boolean step() {
         System.out.println("Round: " + round);
         round++;
-        var percept = ENV.accept(commandTrace.size() > 0 ? commandTrace.get(commandTrace.size()-1) : null);
-        if(percept == null) {
+        var percept = ENV.accept(
+            commandTrace.size() > 0 ? 
+                commandTrace.get(commandTrace.size()-1) : Collections.emptyMap());
+        if(percept == null || percept.size() == 0) {
             System.out.println("Simulation Ended");
             return false;
         }
@@ -34,7 +36,8 @@ public class Simulator<CommandT extends Serializable,
 
         var commands = new HashMap<AgentT,CommandT>();
         for(var agent: AGENTS) 
-            commands.put(agent, agent.percieve(percept.get(agent)));
+            if(percept.keySet().contains(agent))
+                commands.put(agent, agent.percieve(percept.get(agent)));
         System.out.println("Commands Issued: " + commands);
         commandTrace.add(commands);
 

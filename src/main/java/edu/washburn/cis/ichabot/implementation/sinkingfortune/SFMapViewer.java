@@ -9,14 +9,15 @@ import java.util.Comparator;
 
 public class SFMapViewer extends JPanel {
     private final SFMap map;
-    private final SFSinglePlayerEnvironment env;
+    private final SFEnvironment env;
     private int cellSize = 50;
     private ImageIcon spawnIcon;
     private ImageIcon exitIcon;
+    private ImageIcon agentIcon;
     private int maxHeight;
     private int waterLevel;
 
-    public SFMapViewer(SFSinglePlayerEnvironment env, int cellSize) {
+    public SFMapViewer(SFEnvironment env, int cellSize) {
         this.env = env;
         this.map = env.getMap();
         this.cellSize = cellSize;
@@ -31,6 +32,12 @@ public class SFMapViewer extends JPanel {
                 this.getClass().getResource("/images/exit.png"));
         this.exitIcon = new ImageIcon(exitIcon.getImage()
             .getScaledInstance(cellSize, cellSize, Image.SCALE_SMOOTH));
+        
+        this.agentIcon = new ImageIcon(
+                this.getClass().getResource("/images/agent.png"));
+        this.agentIcon = new ImageIcon(agentIcon.getImage()
+            .getScaledInstance(cellSize, cellSize, Image.SCALE_SMOOTH));
+
         setPreferredSize(new Dimension(map.width() * cellSize, 
                                        map.height() * cellSize));
     }
@@ -40,29 +47,36 @@ public class SFMapViewer extends JPanel {
         super.paintComponent(g);
         this.waterLevel = env.getWaterLevel();
         Graphics2D g2 = (Graphics2D) g;
+        var locations = env.getAgentLocations();
 
         for (int r = 0; r < map.height(); r++) {
             for (int c = 0; c < map.width(); c++) {
-                SFCoordinates coord = SFCoordinates.coordinates(r, c);
+                SFCoordinates loc = SFCoordinates.coordinates(r, c);
 
                 g2.setColor(interpolateWaterColor(
-                                map.tileHeight().get(coord)));
+                                map.tileHeight().get(loc)));
                 g2.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
 
                 g2.setColor(Color.BLACK);
                 g2.drawRect(c * cellSize, r * cellSize, cellSize, cellSize);
 
-                if (map.spawnPoints().contains(coord)) {
+                if (map.spawnPoints().contains(loc)) {
                     spawnIcon.paintIcon(this, g2, c * cellSize + 5, r * cellSize + 5);
-                } else if (map.exits().contains(coord)) {
+                } else if (map.exits().contains(loc)) {
                     exitIcon.paintIcon(this, g2, c * cellSize + 5, r * cellSize + 5);
                 }
+
+                if (locations.values().contains(loc)) {
+                    agentIcon.paintIcon(this, g2, c * cellSize + 5, r * cellSize + 5);
+                }
                 
-                Integer goldAmount = map.gold().get(coord);
-                if (goldAmount != null && goldAmount > 0) {
+                int goldAmount = env.getGold().get(loc);
+                if (goldAmount > 0) {
                     g2.setColor(Color.YELLOW);
-                    g2.setFont(new Font("Arial", Font.BOLD, 16));
-                    g2.drawString(goldAmount.toString(), c * cellSize + cellSize / 2 - 8, r * cellSize + cellSize / 2 + 8);
+                    g2.setFont(new Font("Arial", Font.BOLD, 22));
+                    g2.drawString(""+goldAmount, 
+                        c * cellSize + cellSize / 2 - 8, 
+                        r * cellSize + cellSize / 2 + 8);
                 }
             }
         }
