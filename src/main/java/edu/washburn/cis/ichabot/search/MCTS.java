@@ -48,7 +48,6 @@ public class MCTS<ActionT, SearchStateT extends SearchState<ActionT, SearchState
         MCTSNode<ActionT, SearchStateT> root = new MCTSNode<>(initialState);
 
         for (int i = 0; i < maxIterations; i++) {
-            System.out.println("Iteration " + i);
             MCTSNode<ActionT, SearchStateT> selectedNode = select(root);
             MCTSNode<ActionT, SearchStateT> expandedNode = expand(selectedNode);
             double result = simulate(expandedNode);
@@ -68,7 +67,6 @@ public class MCTS<ActionT, SearchStateT extends SearchState<ActionT, SearchState
      */
 
     private MCTSNode<ActionT, SearchStateT> select(MCTSNode<ActionT, SearchStateT> node) {
-        System.out.println("Selecting...");
         while (!node.state.isLeaf()) {
             if (!node.isFullyExpanded()) {
                 return node;
@@ -127,7 +125,6 @@ public class MCTS<ActionT, SearchStateT extends SearchState<ActionT, SearchState
      *         visited.
      */
     private MCTSNode<ActionT, SearchStateT> expand(MCTSNode<ActionT, SearchStateT> node) {
-        System.out.println("Expanding...");
         if (node.state.isLeaf()) return node;
 
         for (ActionT action : node.state.actions()) {
@@ -151,7 +148,6 @@ public class MCTS<ActionT, SearchStateT extends SearchState<ActionT, SearchState
      * @return The value of the leaf node reached by the simulation.
      */
     private double simulate(MCTSNode<ActionT, SearchStateT> node) {
-        System.out.println("Simulating...");
         SearchStateT currentState = node.state;
         Random rand = new Random();
 
@@ -174,7 +170,6 @@ public class MCTS<ActionT, SearchStateT extends SearchState<ActionT, SearchState
      * @param result The value of the leaf node.
      */
     private void backpropagate(MCTSNode<ActionT, SearchStateT> node, double result) {
-        System.out.println("Backpropagating...");
         while (node != null) {
             node.visitCount++;
             node.totalValue += result;
