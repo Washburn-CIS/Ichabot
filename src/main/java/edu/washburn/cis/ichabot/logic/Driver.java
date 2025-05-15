@@ -80,7 +80,7 @@ public class Driver{
 	System.out.println("Facts inferred (bottom-up): " + inferred);
 		
 		
-	KnowledgeBase smartHome = new KnowledgeBase(); //knowledge base for medical example
+	KnowledgeBase smartHome = new KnowledgeBase(); //knowledge base for smart home example
 		
 	smartHome.facts.add("night");
 	smartHome.facts.add("motion_detected");
