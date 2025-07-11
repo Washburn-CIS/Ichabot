@@ -140,4 +140,11 @@ public class ReversiState extends MinimaxSearchState<ReversiAction,ReversiState>
         }
         return b.toString();
     }
+
+    //we are in a leaf node if there are no legal moves for either player
+    @Override
+    public boolean isLeaf() {
+        return (actions().iterator().next().SKIP) 
+            && (this.nextState(actions().iterator().next()).actions().iterator().next().SKIP);
+    }
 }
